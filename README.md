@@ -1,6 +1,6 @@
 # 🧩 Match 3
 
-You can view the pretty version of the notes [here](https://jac-cs-game-programming-fall22.github.io/Notes/#/3-Match-3/).
+You can view the pretty version of the notes [here](https://jac-cs-game-programming-fall22.github.io/Notes/#/2-Match-3/).
 
 ## 🎯 Objectives
 
