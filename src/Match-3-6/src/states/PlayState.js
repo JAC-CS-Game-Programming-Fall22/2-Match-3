@@ -1,15 +1,15 @@
 import { SoundName, StateName } from "../enums.js";
 import {
-	BOARD_SIZE,
 	context,
 	keys,
 	sounds,
 	stateMachine,
-	TILE_SIZE,
 	timer,
 } from "../globals.js";
 import { roundedRectangle } from "../../lib/DrawingHelpers.js";
 import State from "../../lib/State.js";
+import Board from "../objects/Board.js";
+import Tile from "../objects/Tile.js";
 
 export default class PlayState extends State {
 	constructor() {
@@ -99,7 +99,7 @@ export default class PlayState extends State {
 		}
 		else if (keys.s) {
 			keys.s = false;
-			y = Math.min(BOARD_SIZE - 1, y + 1);
+			y = Math.min(Board.SIZE - 1, y + 1);
 			sounds.play(SoundName.Select);
 		}
 		else if (keys.a) {
@@ -109,7 +109,7 @@ export default class PlayState extends State {
 		}
 		else if (keys.d) {
 			keys.d = false;
-			x = Math.min(BOARD_SIZE - 1, x + 1);
+			x = Math.min(Board.SIZE - 1, x + 1);
 			sounds.play(SoundName.Select);
 		}
 
@@ -124,7 +124,7 @@ export default class PlayState extends State {
 		 * The `?.` syntax is called "optional chaining" which allows you to check
 		 * a property on an object even if that object is `null` at the time.
 		 *
-		 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
+		 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
 		 */
 		const tileDistance = Math.abs(this.selectedTile?.boardX - highlightedTile.boardX) + Math.abs(this.selectedTile?.boardY - highlightedTile.boardY);
 
@@ -163,8 +163,8 @@ export default class PlayState extends State {
 			context,
 			this.selectedTile.x + this.board.x,
 			this.selectedTile.y + this.board.y,
-			TILE_SIZE,
-			TILE_SIZE,
+			Tile.SIZE,
+			Tile.SIZE,
 			5,
 			true,
 			false,
@@ -177,13 +177,13 @@ export default class PlayState extends State {
 		context.strokeStyle = 'white';
 		context.lineWidth = 4;
 
-		// Use board position * TILE_SIZE so that the cursor doesn't get tweened during a swap.
+		// Use board position * Tile.SIZE so that the cursor doesn't get tweened during a swap.
 		roundedRectangle(
 			context,
-			this.cursor.boardX * TILE_SIZE + this.board.x,
-			this.cursor.boardY * TILE_SIZE + this.board.y,
-			TILE_SIZE,
-			TILE_SIZE,
+			this.cursor.boardX * Tile.SIZE + this.board.x,
+			this.cursor.boardY * Tile.SIZE + this.board.y,
+			Tile.SIZE,
+			Tile.SIZE,
 		);
 		context.restore();
 	}
@@ -195,7 +195,7 @@ export default class PlayState extends State {
 			50,
 			this.board.y,
 			225,
-			BOARD_SIZE * TILE_SIZE,
+			Board.SIZE * Tile.SIZE,
 			5,
 			true,
 			false,

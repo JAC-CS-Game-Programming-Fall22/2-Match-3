@@ -2,21 +2,19 @@ import Board from "../objects/Board.js";
 import { roundedRectangle } from "../../lib/DrawingHelpers.js";
 import { SoundName } from "../enums.js";
 import {
-	BOARD_POSITION_CENTER,
-	BOARD_SIZE,
 	context,
 	keys,
 	sounds,
-	TILE_SIZE,
 	timer,
 } from "../globals.js";
 import State from "../../lib/State.js";
+import Tile from "../objects/Tile.js";
 
 export default class PlayState extends State {
 	constructor() {
 		super();
 
-		this.board = new Board(BOARD_POSITION_CENTER.x, BOARD_POSITION_CENTER.y);
+		this.board = new Board(Board.POSITION_CENTER.x, Board.POSITION_CENTER.y);
 
 		// Position in the grid which we're currently highlighting.
 		this.cursor = { boardX: 0, boardY: 0 };
@@ -60,7 +58,7 @@ export default class PlayState extends State {
 		}
 		else if (keys.s) {
 			keys.s = false;
-			y = Math.min(BOARD_SIZE - 1, this.cursor.boardY + 1);
+			y = Math.min(Board.SIZE - 1, this.cursor.boardY + 1);
 			sounds.play(SoundName.Select);
 		}
 		else if (keys.a) {
@@ -70,7 +68,7 @@ export default class PlayState extends State {
 		}
 		else if (keys.d) {
 			keys.d = false;
-			x = Math.min(BOARD_SIZE - 1, this.cursor.boardX + 1);
+			x = Math.min(Board.SIZE - 1, this.cursor.boardX + 1);
 			sounds.play(SoundName.Select);
 		}
 
@@ -103,8 +101,8 @@ export default class PlayState extends State {
 			context,
 			this.selectedTile.x + this.board.x,
 			this.selectedTile.y + this.board.y,
-			TILE_SIZE,
-			TILE_SIZE,
+			Tile.SIZE,
+			Tile.SIZE,
 			5,
 			true,
 			false
@@ -119,10 +117,10 @@ export default class PlayState extends State {
 
 		roundedRectangle(
 			context,
-			this.cursor.boardX * TILE_SIZE + this.board.x,
-			this.cursor.boardY * TILE_SIZE + this.board.y,
-			TILE_SIZE,
-			TILE_SIZE,
+			this.cursor.boardX * Tile.SIZE + this.board.x,
+			this.cursor.boardY * Tile.SIZE + this.board.y,
+			Tile.SIZE,
+			Tile.SIZE,
 		);
 		context.restore();
 	}

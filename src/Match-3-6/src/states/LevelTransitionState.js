@@ -1,7 +1,6 @@
 import Board from "../objects/Board.js";
 import { SoundName, StateName } from "../enums.js";
 import {
-	BOARD_POSITION_RIGHT,
 	CANVAS_HEIGHT,
 	CANVAS_WIDTH,
 	context,
@@ -19,6 +18,8 @@ import State from "../../lib/State.js";
 export default class LevelTransitionState extends State {
 	constructor() {
 		super();
+
+		this.board = new Board(Board.POSITION_RIGHT.x, Board.POSITION_RIGHT.y);
 
 		// Start the transition alpha at full so we fade in.
 		this.transitionAlpha = 1;
@@ -42,7 +43,7 @@ export default class LevelTransitionState extends State {
 		sounds.play(SoundName.Music3);
 
 		// Spawn a board and place it on the right.
-		this.board = new Board(BOARD_POSITION_RIGHT.x, BOARD_POSITION_RIGHT.y);
+		this.board = new Board(Board.POSITION_RIGHT.x, Board.POSITION_RIGHT.y);
 
 		this.board.initializePlayBoard();
 

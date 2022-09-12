@@ -1,10 +1,16 @@
-import { BOARD_SIZE, context, sounds, TILE_SIZE, timer } from '../globals.js';
+import { CANVAS_HEIGHT, CANVAS_WIDTH, context, sounds, timer } from '../globals.js';
 import Tile from './Tile.js';
 import { SoundName, TileColour } from '../enums.js';
 import { getRandomPositiveInteger, pickRandomElement } from '../../lib/RandomNumberHelpers.js';
 import { roundedRectangle } from '../../lib/DrawingHelpers.js';
 
 export default class Board {
+	static SIZE = 8;
+	static POSITION_CENTER = {
+		x: (CANVAS_WIDTH - (Board.SIZE * Tile.SIZE)) / 2,
+		y: (CANVAS_HEIGHT - (Board.SIZE * Tile.SIZE)) / 2,
+	};
+
 	/**
 	 * The Board is our arrangement of Tiles with which we must try
 	 * to find matching sets of three horizontally or vertically.
@@ -17,7 +23,7 @@ export default class Board {
 		this.y = y;
 		this.matches = [];
 		this.tiles = [];
-		this.minMatchLength = 3;
+		this.minimumMatchLength = 3;
 		this.tileSprites = Tile.generateSprites();
 
 		this.initializeBoard();
@@ -30,8 +36,8 @@ export default class Board {
 
 	// Loops through the tiles and renders them at their location.
 	renderBoard() {
-		for (let row = 0; row < BOARD_SIZE; row++) {
-			for (let column = 0; column < BOARD_SIZE; column++) {
+		for (let row = 0; row < Board.SIZE; row++) {
+			for (let column = 0; column < Board.SIZE; column++) {
 				this.tiles[row][column].render(this.x, this.y);
 			}
 		}
@@ -52,8 +58,8 @@ export default class Board {
 					context,
 					match[match.length - 1].x + this.x,
 					match[0].y + this.y,
-					match.length * TILE_SIZE,
-					TILE_SIZE
+					match.length * Tile.SIZE,
+					Tile.SIZE
 				);
 			}
 			else {
@@ -61,8 +67,8 @@ export default class Board {
 					context,
 					match[0].x + this.x,
 					match[match.length - 1].y + this.y,
-					TILE_SIZE,
-					match.length * TILE_SIZE
+					Tile.SIZE,
+					match.length * Tile.SIZE
 				);
 			}
 		});
@@ -74,19 +80,19 @@ export default class Board {
 		this.tiles = [];
 
 		// For each row in the board...
-		for (let row = 0; row < BOARD_SIZE; row++) {
+		for (let row = 0; row < Board.SIZE; row++) {
 			// Insert a new array to represent the row.
 			this.tiles.push([]);
 
 			// For each column in the row...
-			for (let column = 0; column < BOARD_SIZE; column++) {
+			for (let column = 0; column < Board.SIZE; column++) {
 				this.tiles[row].push(this.generateTile(column, row));
 			}
 		}
 
 		this.calculateMatches();
 
-		// Recursively initialize if matches exist so we always start with a matchless board.
+		// Reinitialize if matches exist so we always start with a matchless board.
 		while (this.matches.length > 0) {
 			this.initializeBoard();
 		}
@@ -140,13 +146,13 @@ export default class Board {
 	}
 
 	resolveHorizontalMatches() {
-		for (let y = 0; y < BOARD_SIZE; y++) {
+		for (let y = 0; y < Board.SIZE; y++) {
 			let matchCounter = 1;
 			let colourToMatch = this.tiles[y][0].colour;
 			let rowMatches = [];
 
 			// For every horizontal tile...
-			for (let x = 1; x < BOARD_SIZE; x++) {
+			for (let x = 1; x < Board.SIZE; x++) {
 				// If this is the same colour as the one we're trying to match...
 				if (this.tiles[y][x].colour === colourToMatch) {
 					matchCounter++;
@@ -156,7 +162,7 @@ export default class Board {
 					colourToMatch = this.tiles[y][x].colour;
 
 					// If we have a match of 3 or more up until now, add it to our matches array.
-					if (matchCounter >= this.minMatchLength) {
+					if (matchCounter >= this.minimumMatchLength) {
 						const match = [];
 
 						// Go backwards from here by matchCounter.
@@ -172,18 +178,18 @@ export default class Board {
 					matchCounter = 1;
 
 					// We don't need to check last two if they won't be in a match.
-					if (x >= BOARD_SIZE - 2) {
+					if (x >= Board.SIZE - 2) {
 						break;
 					}
 				}
 			}
 
 			// Account for matches at the end of a row.
-			if (matchCounter >= this.minMatchLength) {
+			if (matchCounter >= this.minimumMatchLength) {
 				let match = [];
 
 				// Go backwards from here by matchCounter.
-				for (let x = BOARD_SIZE - 1; x >= BOARD_SIZE - matchCounter; x--) {
+				for (let x = Board.SIZE - 1; x >= Board.SIZE - matchCounter; x--) {
 					match.push(this.tiles[y][x]);
 				}
 
@@ -197,13 +203,13 @@ export default class Board {
 	}
 
 	resolveVerticalMatches() {
-		for (let x = 0; x < BOARD_SIZE; x++) {
+		for (let x = 0; x < Board.SIZE; x++) {
 			let matchCounter = 1;
 			let colourToMatch = this.tiles[0][x].colour;
 			let columnMatches = [];
 
 			// For every vertical tile...
-			for (let y = 1; y < BOARD_SIZE; y++) {
+			for (let y = 1; y < Board.SIZE; y++) {
 				// If this is the same colour as the one we're trying to match...
 				if (this.tiles[y][x].colour === colourToMatch) {
 					matchCounter++;
@@ -213,7 +219,7 @@ export default class Board {
 					colourToMatch = this.tiles[y][x].colour;
 
 					// If we have a match of 3 or more up until now, add it to our matches array.
-					if (matchCounter >= this.minMatchLength) {
+					if (matchCounter >= this.minimumMatchLength) {
 						const match = [];
 
 						// Go backwards from here by matchCounter.
@@ -229,18 +235,18 @@ export default class Board {
 					matchCounter = 1;
 
 					// We don't need to check last two if they won't be in a match.
-					if (y >= BOARD_SIZE - 2) {
+					if (y >= Board.SIZE - 2) {
 						break;
 					}
 				}
 			}
 
 			// Account for matches at the end of a column.
-			if (matchCounter >= this.minMatchLength) {
+			if (matchCounter >= this.minimumMatchLength) {
 				let match = [];
 
 				// Go backwards from here by matchCounter.
-				for (let y = BOARD_SIZE - 1; y >= BOARD_SIZE - matchCounter; y--) {
+				for (let y = Board.SIZE - 1; y >= Board.SIZE - matchCounter; y--) {
 					match.push(this.tiles[y][x]);
 				}
 

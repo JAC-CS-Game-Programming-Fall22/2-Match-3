@@ -1,8 +1,10 @@
-import { context, images, TILE_SIZE } from "../globals.js";
+import { context, images } from "../globals.js";
 import { ImageName, TileColour, TilePattern } from "../enums.js";
 import Sprite from "../../lib/Sprite.js";
 
 export default class Tile {
+	static SIZE = 32;
+
 	/**
 	 * The individual tiles that make up our game board. Each Tile can have a
 	 * color and a pattern, with the patterns adding extra points to the matches.
@@ -19,8 +21,8 @@ export default class Tile {
 		this.boardY = y;
 
 		// Canvas position.
-		this.x = this.boardX * TILE_SIZE;
-		this.y = this.boardY * TILE_SIZE;
+		this.x = this.boardX * Tile.SIZE;
+		this.y = this.boardY * Tile.SIZE;
 
 		// Tile appearance.
 		this.colour = colour;
@@ -37,7 +39,7 @@ export default class Tile {
 		const ROWS = 9;
 		const COLUMNS = 6;
 		const SPLIT_POINT = 2;
-		const sprites = [];
+		const sprites = new Array();
 		let x = 0;
 		let y = 0;
 		let counter = 0;
@@ -48,16 +50,16 @@ export default class Tile {
 				sprites[counter] = [];
 
 				for (let column = 0; column < COLUMNS; column++) {
-					const sprite = new Sprite(images.get(ImageName.SpriteSheet), x, y, TILE_SIZE, TILE_SIZE);
+					const sprite = new Sprite(images.get(ImageName.SpriteSheet), x, y, Tile.SIZE, Tile.SIZE);
 
 					sprites[counter].push(sprite);
-					x += TILE_SIZE;
+					x += Tile.SIZE;
 				}
 
 				counter++;
 			}
 
-			y += TILE_SIZE;
+			y += Tile.SIZE;
 			x = 0;
 		}
 

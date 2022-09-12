@@ -1,7 +1,6 @@
 import Board from "../objects/Board.js";
 import { SoundName, StateName } from "../enums.js";
 import {
-	BOARD_POSITION_CENTER,
 	CANVAS_HEIGHT,
 	CANVAS_WIDTH,
 	context,
@@ -44,10 +43,10 @@ export default class TitleScreenState extends State {
 
 		// Generate full board just for display in the background.
 		this.board = new Board(
-			BOARD_POSITION_CENTER.x,
-			BOARD_POSITION_CENTER.y,
-			BOARD_POSITION_CENTER.width,
-			BOARD_POSITION_CENTER.height,
+			Board.POSITION_CENTER.x,
+			Board.POSITION_CENTER.y,
+			Board.POSITION_CENTER.width,
+			Board.POSITION_CENTER.height,
 		);
 		this.board.initializeTitleScreenBoard();
 

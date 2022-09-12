@@ -1,6 +1,6 @@
 # 🧩 Match 3
 
-You can view the pretty version of the notes [here](https://jac-cs-game-programming-f21.github.io/Notes/#/3-Match-3/).
+You can view the pretty version of the notes [here](https://jac-cs-game-programming-fall22.github.io/Notes/#/3-Match-3/).
 
 ## 🎯 Objectives
 
@@ -14,25 +14,21 @@ Match-3 has taken several forms over the years, with its roots in games like Tet
 
 ![The match 3 games Candy Crush and Bejeweled](./images/Match-3.png)
 
-_Images courtesy of [Medium](https://medium.com/@john_23522/a-brief-history-of-match-three-games-31233dcdfcc5)_
+_Images from [Medium](https://medium.com/@john_23522/a-brief-history-of-match-three-games-31233dcdfcc5)_
 
 ## 🔨 Setup
 
-1. Clone the repo (or download the zip) for today's lecture, which you can find [here](https://github.com/JAC-CS-Game-Programming-F21/3-Match-3).
+1. Clone the repo (or download the zip) for today's lecture, which you can find [here](https://github.com/JAC-CS-Game-Programming-Fall22/2-Match-3).
 2. Open the repo in Visual Studio Code.
-3. Instead of running a server manually and having to refresh the browser tab every time you want to see your changes, you can now install Visual Studio Code's "Live Server" extension and have it all be taken care of for you:
+3. Start Visual Studio Code's "Live Server" extension. If you don't have it installed:
    1. Click on the extensions icons in the left-hand side navigation.
    2. Search for "Live Server".
    3. Click install next to the extension by "Ritwick Dey". You may have to reload the window.
 
       ![Live Server](./images/Live-Server.png)
 
-   4. Once it's installed, click "Go Live" on the bottom right of the window. This should start the server and automatically open a new tab in your browser at `http://127.0.0.1:5500/` (or whatever URL/port it says in VSC).
+   4. Once it's installed, click "Go Live" on the bottom right of the window. This should start the server and automatically open a new tab in your browser at `http://127.0.0.1:5500/` (or whatever port it says on your machine).
       - The files the server serves will be relative to the directory you had open in VSC when you hit "Go Live".
-
-4. Alternatively, you can run the server manually without installing "Live Server":
-   1. Open the VSC terminal (`` CTRL + ` ``) and run `npx http-server` (assuming you have NodeJS installed, if you don't, [download and install it from here](https://nodejs.org)) inside the root folder of the repo.
-   2. In your browser, navigate to `http://localhost:8080` (or whatever the URL is that is displayed in the terminal).
 
 ## 🌅 Match-3-0 (The "Day-0" Update)
 
@@ -45,13 +41,13 @@ Match-3-0 builds the board and populates it with randomly generated tiles.
 
   ![DawnBringer's 32 Color Palette](./images/DawnBringer.png)
 
-    _Image courtesy of [PixelJoint](http://pixeljoint.com/forum/forum_posts.asp?TID=16247)_
+    _Image from [PixelJoint](http://pixeljoint.com/forum/forum_posts.asp?TID=16247)_
 
 - The idea behind using a palette is that it allows you to _dither_ (i.e., interleave two colours pixel by pixel to approximate another colour) such that your games can look like they use many colours, when in reality you only have a small set (in this case 32) available to you.
 
   ![Dithering](./images/Dithering.png)
 
-    _Image courtesy of [Wikipedia](https://en.wikipedia.org/wiki/Dither)_
+    _Image from [Wikipedia](https://en.wikipedia.org/wiki/Dither)_
 
 - When applied in the proper context, the difference between a dithered image and an image that actually uses hundreds of thousands of colours can be quite minimal:
 
@@ -75,11 +71,11 @@ Match-3-0 builds the board and populates it with randomly generated tiles.
 
   ![Mario/Luigi Colour Palettes](./images/Palette-Swap2.jpg)
 
-    _Image courtesy of [TodayIFoundOut](https://www.todayifoundout.com/index.php/2010/01/the-clouds-and-bushes-in-super-mario-bros-are-the-same/)_
+    _Image from [TodayIFoundOut](https://www.todayifoundout.com/index.php/2010/01/the-clouds-and-bushes-in-super-mario-bros-are-the-same/)_
 
 ### Code Restructuring
 
-If we go back to Breakout-8 for a moment and look at the file structure, we can see that we jammed everything into the `src` folder. This worked fine for games like Flappy Bird and Breakout, but as our games become more complex and the number of files grows, this will get unmanageable. Take a look at Match-3-0 and examine the file structure:
+If we go back to Breakout-8 for a moment and look at the file structure, we can see that we jammed everything into the `src` folder. This worked fine for games like Pong and Breakout, but as our games become more complex and the number of files grows, this will get unmanageable. Take a look at Match-3-0 and examine the file structure:
 
 ```text
 Match-3-0
@@ -115,6 +111,8 @@ Match-3-0
 
 - `assets/`: Where we will keep all the fonts/sounds/images for the game.
 - `lib/`: All of the files that help us make a game, but are not specifically tied to one game in particular. In other words, the files in here are the framework we're building with which to create games.
+  - `DrawingHelpers.js`: Contains a helper function to draw a rounded rectangle.
+  - `Images.js`: Maintains an object with all the `Graphic` objects which can be referenced/drawn at any point in the game.
 - `src/`: All of the code that is specific to the game.
   - `config.json`: Contains configuration data required to load in the game assets. Before, we were doing this inside of `globals.js`. We always want to think about "separation of concerns" in software development, and game development is no exception. `globals.js` was getting too bloated, so we decided to separate the specific configuration for the game from the actual global variables.
   - `enums.js`: Too many magic strings and numbers in your program? Enums to the rescue! Here we define enums for things like state names, sound names, and image names. In particular for Match 3, we will also have our tile colours and patterns in here as well.
@@ -142,16 +140,16 @@ Match-3-0
               sprites[counter] = [];
 
               for (let column = 0; column < COLUMNS; column++) {
-                  const sprite = new Sprite(images.get(ImageName.SpriteSheet), x, y, TILE_SIZE,   TILE_SIZE);
+                  const sprite = new Sprite(images.get(ImageName.SpriteSheet), x, y, Tile.SIZE,   Tile.SIZE);
 
                   sprites[counter].push(sprite);
-                  x += TILE_SIZE;
+                  x += Tile.SIZE;
               }
 
               counter++;
           }
 
-          y += TILE_SIZE;
+          y += Tile.SIZE;
           x = 0;
       }
 
@@ -174,10 +172,10 @@ Match-3-0
       const patternRange = [0, 0];
       const tiles = [];
 
-      for (let row = 0; row < BOARD_SIZE; row++) {
+      for (let row = 0; row < Board.SIZE; row++) {
           tiles.push([]);
 
-          for (let column = 0; column < BOARD_SIZE; column++) {
+          for (let column = 0; column < Board.SIZE; column++) {
               const colour = pickRandomElement(colourList);
               const pattern = getRandomPositiveInteger(patternRange[0], patternRange[1]);
               const tile = new Tile(column, row, colour, pattern, this.tileSprites);
@@ -219,13 +217,13 @@ Match-3-1 allows the player to swap two tiles on the board. This implementation 
           y = Math.max(0, this.cursor.boardY - 1);
       }
       else if (keys.s) {
-          y = Math.min(BOARD_SIZE - 1, this.cursor.boardY + 1);
+          y = Math.min(Board.SIZE - 1, this.cursor.boardY + 1);
       }
       else if (keys.a) {
           x = Math.max(0, this.cursor.boardX - 1);
       }
       else if (keys.d) {
-          x = Math.min(BOARD_SIZE - 1, this.cursor.boardX + 1);
+          x = Math.min(Board.SIZE - 1, this.cursor.boardX + 1);
       }
 
       this.cursor = this.board.tiles[y][x];
@@ -260,11 +258,11 @@ Match-3-2 adds the functionality to animate the tiles being swapped on the board
 
 ### Timers
 
-So far we've only had one notion of time in our games, namely, delta time. Since delta time is the time elapsed since the last frame was drawn, we can use this value to implement more concrete timer logic.
+So far we've only had one notion of time in our games, namely, delta time. Since delta time is the time elapsed since the last frame was drawn, we can use this value to implement a more concrete timer mechanism.
 
 #### Timer-0 (The "Simple" Way)
 
-Timer-0 renders a blank screen with the following text drawn in the center: "Timer: x seconds", where x is an integer counting up from 0 once per second.
+Timer-0 renders a blank screen with the following text drawn in the center: "Current Second: x seconds", where x is an integer counting up from 0 once per second.
 
 ##### Important Code
 
@@ -277,7 +275,7 @@ Timer-0 renders a blank screen with the following text drawn in the center: "Tim
 
       if (secondTimer > 1) {
           currentSecond++;
-          secondTimer %= 1;
+          secondTimer = 0;
       }
 
       render();
@@ -285,7 +283,7 @@ Timer-0 renders a blank screen with the following text drawn in the center: "Tim
   ```
 
 - Finally, `render()` displays our text and timer to the screen.
-- This implementation is not ideal.. Can you think of why?
+- This implementation is not ideal... Can you think of why?
 
 #### Timer-1 (The "Not-Scalable" Way)
 
@@ -300,21 +298,21 @@ Timer-1 renders a screen with the text "Counter `i`: `x` (every `y`s)" displayed
 
   if (secondTimer > 1) {
       currentSecond++;
-      secondTimer %= 1;
+      secondTimer = 0;
   }
 
   secondTimer2 += dt;
 
   if (secondTimer2 > 2) {
       currentSecond2++;
-      secondTimer2 %= 2;
+      secondTimer2 = 0;
   }
 
   secondTimer3 += dt;
 
   if (secondTimer3 > 4) {
       currentSecond3++;
-      secondTimer3 %= 4;
+      secondTimer3 = 0;
   }
 
   // Repeat for as many timers as you may have.
@@ -324,7 +322,7 @@ Surely there is a better way to do this than initializing all these variables an
 
 #### Timer-2 (The "Clean" Way)
 
-Timer-2 behaves exactly like Timer-1 but is written with much better design.
+Timer-2 behaves exactly like Timer-1 but is written with a much better design.
 
 ##### Important Functions
 
@@ -390,14 +388,14 @@ Tween-0 renders a screen in which the bird sprite moves across the screen from l
 ##### Important Code
 
 - Take note of the `DURATION` constant we've defined atop `main.js`. We use it in `update()` to ensure that our sprite takes approximately that amount of time (in seconds) to move across the screen each time the program is run.
-- Also at the top of `main.js` we're creating our bird sprite (note than we've added its image file to our project directory), assigning its initial coordinate values, and initializing an `END_X` constant to hold the value of the `x` coordinate we want our sprite to have at the end of its movement.
+- Also at the top of `main.js` we're creating our bird sprite (note that we've added its image file to our project directory), assigning its initial coordinate values, and initializing an `END_X` constant to hold the value of the `x` coordinate we want our sprite to have at the end of its movement.
 - Now we use `Math.min()` in `update()`:
 
   ```javascript
   function update(dt) {
       if (timer < DURATION) {
           timer += dt;
-          flappyX = Math.min(END_X, END_X * (timer / DURATION));
+          bird.x = Math.min(END_X, END_X * (timer / DURATION));
       }
   }
   ```
@@ -411,7 +409,7 @@ Tween-1 operates under the same premise as Tween-0, but instead of moving one sp
 
 ##### Important Code
 
-- At the top of `main.js` we set up the sprites on the screen looping through a `birds` array. This loop also sets up an individual `rate` and `y` position for each bird:
+- At the top of `main.js` we set up the sprites on the screen looping through a `birds` array. This loop also sets up an individual `duration` and `y` position for each bird:
 
   ```javascript
   const birds = [];
@@ -420,20 +418,20 @@ Tween-1 operates under the same premise as Tween-0, but instead of moving one sp
       birds.push({
           x: 0,
           y: Math.random() * (canvas.height - flappy.height),
-          rate: Math.random() * DURATION,
+          duration: Math.random() * DURATION,
       })
   }
   ```
 
-- Each bird's `rate` and `y` position is calculated randomly. Recall that `Math.random()` by itself will generate a random float between `0` and `1`, so we have to multiply the resulting value by the maximum number we want the random number to be.
-- In `update()` we loop over the birds and move each sprite across the screen using its individual `rate`:
+- Each bird's `duration` and `y` position is calculated randomly. Recall that `Math.random()` by itself will generate a random float between `0` and `1`, so we have to multiply the resulting value by the maximum number we want the random number to be.
+- In `update()` we loop over the birds and move each sprite across the screen using its individual `duration`:
 
   ```javascript
   function update(dt) {
       if (timer < DURATION) {
           timer += dt;
           birds.forEach((bird) => {
-              bird.x = Math.min(END_X, END_X * (timer / bird.rate));
+              bird.x = Math.min(END_X, END_X * (timer / bird.duration));
           });
       }
   }
@@ -455,7 +453,7 @@ Tween-2 behaves similarly to Tween-1 but now we're using the `Timer::tween()` fu
 - This time in `main.js`:
   - We've introduced an opacity value for our birds which, when tweened, will look like the bird is fading in as it travels across the screen.
   - The starting and end position of each bird is randomized to demonstrate that we can tween any values now.
-  - We pass in a `callback` to `timer.tween()` that will change the bird's sprite from red to green when the tween is done.
+  - We pass in a `callback` to `timer.tween()` that will change the bird's sprite from when the tween is done.
 
   ```javascript
   birds.forEach((bird) => {
@@ -464,7 +462,7 @@ Tween-2 behaves similarly to Tween-1 but now we're using the `Timer::tween()` fu
           ['x', 'y', 'opacity'],
           [bird.endX, bird.endY, 1],
           bird.duration,
-          () => bird.sprite = flappyGreen,
+          () => bird.sprite = '🐥',
       );
   });
   ```

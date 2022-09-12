@@ -17,19 +17,21 @@
  * As per previous projects, we'll be adopting a retro, NES-quality aesthetic.
  *
  * Credit for graphics:
- * https://opengameart.org/users/buch
+ * @see https://opengameart.org/users/buch
  *
  * Credit for music:
- * http://freemusicarchive.org/music/RoccoW/
+ * @see http://freemusicarchive.org/music/RoccoW/
  *
  * Cool texture generator, used for background:
- * http://cpetry.github.io/TextureGenerator-Online/
+ * @see http://cpetry.github.io/TextureGenerator-Online/
  */
 
 import { StateName } from "./enums.js";
 import Game from "../lib/Game.js";
 import {
 	canvas,
+	CANVAS_HEIGHT,
+	CANVAS_WIDTH,
 	context,
 	fonts,
 	images,
@@ -38,6 +40,14 @@ import {
 	stateMachine,
 } from "./globals.js";
 import PlayState from "./states/PlayState.js";
+
+// Set the dimensions of the play area.
+canvas.width = CANVAS_WIDTH;
+canvas.height = CANVAS_HEIGHT;
+canvas.setAttribute('tabindex', '1'); // Allows the canvas to have user input.
+
+// Now that the canvas element has been prepared, we can add it to the DOM.
+document.body.appendChild(canvas);
 
 // Fetch the asset definitions from config.json.
 const {
@@ -64,7 +74,7 @@ canvas.addEventListener('keyup', event => {
 	keys[event.key] = false;
 });
 
-const game = new Game(stateMachine, context, canvas.width, canvas.height);
+const game = new Game(stateMachine, context, CANVAS_WIDTH, CANVAS_HEIGHT);
 
 game.start();
 

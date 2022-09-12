@@ -41,7 +41,7 @@ export default class Timer {
 	/**
 	 * Removes the finished tasks by looping through each tasks and checking the isDone flag.
 	 *
-	 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
+	 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
 	 */
 	removeFinishedTasks() {
 		this.tasks = this.tasks.filter(task => !task.isDone);
@@ -52,17 +52,16 @@ export default class Timer {
 	}
 
 	/**
-	 * Increase a value until a specified value is reached
-	 * over a specified period of time in seconds.
+	 * Interpolate a value until a specified value is reached over a specified period of time in seconds.
 	 *
-	 * @param {object} object The object to tween.
-	 * @param {array} parameters The paramaters on the object to tween as strings.
+	 * @param {array} object An object that has at least one numerical property to interpolate.
+	 * @param {array} parameters The properties of the object to interpolate (as strings).
 	 * @param {array} endValues The final numerical values the parameters should reach.
-	 * @param {number} duration How long the tween should take.
+	 * @param {number} duration How long the interpolation should take.
 	 * @param {function} callback The function to execute after duration has passed.
 	 */
 	tween(object, parameters, endValues, duration, callback = () => { }) {
-		const startingValues = JSON.parse(JSON.stringify(object));
+		const startingValues = JSON.parse(JSON.stringify(object)); // Remove extra parameters (ex. prototype).
 
 		this.addTask((time) => {
 			parameters.forEach((parameter, index) => {
@@ -127,7 +126,7 @@ class Task {
 		// Otherwise, at every interval, execute the action.
 		else if (this.intervalTimer >= this.interval) {
 			this.action(dt);
-			this.intervalTimer %= this.interval;
+			this.intervalTimer = 0;
 		}
 
 		// At the end of the duration, execute the callback.

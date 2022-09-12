@@ -2,22 +2,20 @@ import Board from "../objects/Board.js";
 import { roundedRectangle } from "../../lib/DrawingHelpers.js";
 import { SoundName, StateName } from "../enums.js";
 import {
-	BOARD_POSITION_RIGHT,
-	BOARD_SIZE,
 	context,
 	keys,
 	sounds,
 	stateMachine,
-	TILE_SIZE,
 	timer,
 } from "../globals.js";
 import State from "../../lib/State.js";
+import Tile from "../objects/Tile.js";
 
 export default class PlayState extends State {
 	constructor() {
 		super();
 
-		this.board = new Board(BOARD_POSITION_RIGHT.x, BOARD_POSITION_RIGHT.y);
+		this.board = new Board(Board.POSITION_RIGHT.x, Board.POSITION_RIGHT.y);
 
 		// Position in the grid which we're currently highlighting.
 		this.cursor = { boardX: 0, boardY: 0 };
@@ -53,7 +51,7 @@ export default class PlayState extends State {
 	enter(parameters) {
 		this.score = parameters.score;
 		this.level = parameters.level;
-		this.board = new Board(BOARD_POSITION_RIGHT.x, BOARD_POSITION_RIGHT.y);
+		this.board = new Board(Board.POSITION_RIGHT.x, Board.POSITION_RIGHT.y);
 		this.timer = this.maxTimer;
 		this.scoreGoal *= Math.floor(this.level * this.scoreGoalScale);
 
@@ -101,7 +99,7 @@ export default class PlayState extends State {
 		}
 		else if (keys.s) {
 			keys.s = false;
-			y = Math.min(BOARD_SIZE - 1, this.cursor.boardY + 1);
+			y = Math.min(Board.SIZE - 1, this.cursor.boardY + 1);
 			sounds.play(SoundName.Select);
 		}
 		else if (keys.a) {
@@ -111,7 +109,7 @@ export default class PlayState extends State {
 		}
 		else if (keys.d) {
 			keys.d = false;
-			x = Math.min(BOARD_SIZE - 1, this.cursor.boardX + 1);
+			x = Math.min(Board.SIZE - 1, this.cursor.boardX + 1);
 			sounds.play(SoundName.Select);
 		}
 
@@ -198,8 +196,8 @@ export default class PlayState extends State {
 			context,
 			this.selectedTile.x + this.board.x,
 			this.selectedTile.y + this.board.y,
-			TILE_SIZE,
-			TILE_SIZE,
+			Tile.SIZE,
+			Tile.SIZE,
 			5,
 			true,
 			false
@@ -214,10 +212,10 @@ export default class PlayState extends State {
 
 		roundedRectangle(
 			context,
-			this.cursor.boardX * TILE_SIZE + this.board.x,
-			this.cursor.boardY * TILE_SIZE + this.board.y,
-			TILE_SIZE,
-			TILE_SIZE,
+			this.cursor.boardX * Tile.SIZE + this.board.x,
+			this.cursor.boardY * Tile.SIZE + this.board.y,
+			Tile.SIZE,
+			Tile.SIZE,
 		);
 		context.restore();
 	}
@@ -229,7 +227,7 @@ export default class PlayState extends State {
 			50,
 			this.board.y,
 			225,
-			BOARD_SIZE * TILE_SIZE,
+			Board.SIZE * Tile.SIZE,
 			5,
 			true,
 			false

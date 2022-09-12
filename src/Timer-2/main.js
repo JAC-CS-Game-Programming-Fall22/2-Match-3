@@ -8,8 +8,18 @@
 
 import Timer from "./Timer.js";
 
-const canvas = document.querySelector('canvas');
-const context = canvas.getContext('2d');
+const canvas = document.createElement('canvas');
+const context = canvas.getContext('2d') || new CanvasRenderingContext2D();
+const CANVAS_WIDTH = 640;
+const CANVAS_HEIGHT = 360;
+
+// Set the dimensions of the play area.
+canvas.width = CANVAS_WIDTH;
+canvas.height = CANVAS_HEIGHT;
+canvas.setAttribute('tabindex', '1'); // Allows the canvas to have user input.
+
+// Now that the canvas element has been prepared, we can add it to the DOM.
+document.body.appendChild(canvas);
 
 let lastTime = 0;
 
@@ -54,7 +64,7 @@ function update(dt) {
 }
 
 function render() {
-	context.clearRect(0, 0, canvas.width, canvas.height);
+	context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
 	context.font = '30px Consolas, Courier';
 	context.textAlign = 'center'

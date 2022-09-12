@@ -1,10 +1,9 @@
-import { SoundName, StateName } from "../enums.js";
+import { StateName } from "../enums.js";
 import {
 	CANVAS_HEIGHT,
 	CANVAS_WIDTH,
 	context,
 	keys,
-	sounds,
 	stateMachine
 } from "../globals.js";
 import State from "../../lib/State.js";

@@ -34,7 +34,7 @@ export default class Timer {
 	/**
 	 * Removes the finished tasks by looping through each tasks and checking the isDone flag.
 	 *
-	 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
+	 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
 	 */
 	removeFinishedTasks() {
 		this.tasks = this.tasks.filter(task => !task.isDone);
@@ -67,7 +67,7 @@ class Task {
 		// Every interval, execute the action.
 		if (this.intervalTimer >= this.interval) {
 			this.action(dt);
-			this.intervalTimer %= this.interval;
+			this.intervalTimer = 0;
 		}
 
 		// At the end of the duration, execute the callback.

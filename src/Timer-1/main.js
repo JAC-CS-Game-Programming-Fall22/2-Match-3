@@ -5,8 +5,18 @@
  * some output on the screen, but with more timers to illustrate scaling.
  */
 
-const canvas = document.querySelector('canvas');
-const context = canvas.getContext('2d');
+const canvas = document.createElement('canvas');
+const context = canvas.getContext('2d') || new CanvasRenderingContext2D();
+const CANVAS_WIDTH = 640;
+const CANVAS_HEIGHT = 360;
+
+// Set the dimensions of the play area.
+canvas.width = CANVAS_WIDTH;
+canvas.height = CANVAS_HEIGHT;
+canvas.setAttribute('tabindex', '1'); // Allows the canvas to have user input.
+
+// Now that the canvas element has been prepared, we can add it to the DOM.
+document.body.appendChild(canvas);
 
 let lastTime = 0;
 let currentSecond = 0;
@@ -34,46 +44,46 @@ function update(dt) {
 
 	if (secondTimer > 1) {
 		currentSecond++;
-		secondTimer %= 1;
+		secondTimer = 0;
 	}
 
 	secondTimer2 += dt;
 
 	if (secondTimer2 > 2) {
 		currentSecond2++;
-		secondTimer2 %= 2;
+		secondTimer2 = 0;
 	}
 
 	secondTimer3 += dt;
 
 	if (secondTimer3 > 4) {
 		currentSecond3++;
-		secondTimer3 %= 4;
+		secondTimer3 = 0;
 	}
 
 	secondTimer4 += dt;
 
 	if (secondTimer4 > 3) {
 		currentSecond4++;
-		secondTimer4 %= 3;
+		secondTimer4 = 0;
 	}
 
 	secondTimer5 += dt;
 
 	if (secondTimer5 > 2) {
 		currentSecond5++;
-		secondTimer5 %= 2;
+		secondTimer5 = 0;
 	}
 
 	render();
 }
 
 function render() {
-	context.clearRect(0, 0, canvas.width, canvas.height);
+	context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
 	context.fillStyle = 'white';
 	context.font = '30px Consolas, Courier';
-	context.textAlign = 'center'
+	context.textAlign = 'center';
 	context.fillText(`Timer-1`, canvas.width * 0.5, canvas.height * 0.15);
 	context.font = '20px Consolas, Courier';
 	context.fillText(`Counter 1: ${currentSecond} (every 1s)`, canvas.width * 0.5, canvas.height * 0.4);
