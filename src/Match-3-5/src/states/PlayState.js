@@ -198,7 +198,7 @@ export default class PlayState extends State {
 			this.selectedTile.y + this.board.y,
 			Tile.SIZE,
 			Tile.SIZE,
-			5,
+			10,
 			true,
 			false
 		);
