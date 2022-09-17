@@ -1,6 +1,6 @@
 import { CANVAS_HEIGHT, CANVAS_WIDTH, context, sounds, timer } from '../globals.js';
 import Tile from './Tile.js';
-import { SoundName, TileColour } from '../enums.js';
+import { SoundName, TileColour, TilePattern } from '../enums.js';
 import { getRandomPositiveInteger, pickRandomElement } from '../../lib/RandomNumberHelpers.js';
 import { roundedRectangle } from '../../lib/DrawingHelpers.js';
 
@@ -107,7 +107,7 @@ export default class Board {
 			TileColour.Blue,
 			TileColour.Orange,
 		];
-		const patternRange = [0, 0];
+		const patternRange = [TilePattern.Flat, TilePattern.Flat];
 		const colour = pickRandomElement(colourList);
 		const pattern = getRandomPositiveInteger(patternRange[0], patternRange[1]);
 

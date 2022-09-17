@@ -169,7 +169,7 @@ Match-3-0
           TileColour.Blue,
           TileColour.Orange,
       ];
-      const patternRange = [0, 0];
+      const patternRange = [TilePattern.Flat, TilePattern.Flat];
       const tiles = [];
 
       for (let row = 0; row < Board.SIZE; row++) {
