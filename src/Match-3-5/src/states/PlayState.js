@@ -185,7 +185,7 @@ export default class PlayState extends State {
 
 		// Tween the new tiles falling one by one for a more interesting animation.
 		for (const tile of newTiles) {
-			await timer.tweenAsync(tile.tile, tile.parameters, tile.endValues, 0.05);
+			await timer.tweenAsync(tile.tile, tile.parameters, tile.endValues, 0.1);
 		}
 	}
 
