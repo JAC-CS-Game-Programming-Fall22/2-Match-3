@@ -128,7 +128,7 @@ export default class PlayState extends State {
 
 		// Tween all the falling blocks simultaneously.
 		await Promise.all(tilesToFall.map((tile) => {
-			timer.tween(tile.tile, tile.parameters, tile.endValues, 0.25);
+			timer.tweenAsync(tile.tile, tile.parameters, tile.endValues, 0.25);
 		}));
 
 		// Get an array with tween values for tiles that should replace the removed tiles.
@@ -136,7 +136,7 @@ export default class PlayState extends State {
 
 		// Tween the new tiles falling one by one for a more interesting animation.
 		for (const tile of newTiles) {
-			await timer.tweenAsync(tile.tile, tile.parameters, tile.endValues, 0.05);
+			await timer.tweenAsync(tile.tile, tile.parameters, tile.endValues, 0.1);
 		}
 	}
 
