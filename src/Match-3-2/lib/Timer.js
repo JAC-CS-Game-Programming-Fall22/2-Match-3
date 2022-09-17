@@ -70,13 +70,12 @@ export default class Timer {
 				const startValue = startingValues[parameter];
 				const endValue = endValues[index];
 				const scaleRatio = time / duration;
+				const currentValue = startValue + ((endValue - startValue) * scaleRatio);
 
 				if (direction === 1) {
-					const currentValue = startValue + ((endValue - startValue) * scaleRatio);
 					object[parameter] = Math.min(endValue, currentValue);
 				}
 				else {
-					const currentValue = startValue - ((startValue - endValue) * scaleRatio);
 					object[parameter] = Math.max(endValue, currentValue);
 				}
 			});
