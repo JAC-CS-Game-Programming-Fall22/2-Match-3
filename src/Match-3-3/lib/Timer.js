@@ -54,7 +54,7 @@ export default class Timer {
 	/**
 	 * Interpolate a value until a specified value is reached over a specified period of time in seconds.
 	 *
-	 * @param {array} object An object that has at least one numerical property to interpolate.
+	 * @param {object} object An object that has at least one numerical property to interpolate.
 	 * @param {array} parameters The properties of the object to interpolate (as strings).
 	 * @param {array} endValues The final numerical values the parameters should reach.
 	 * @param {number} duration How long the interpolation should take.
